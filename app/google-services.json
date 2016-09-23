@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "55286865240",
+    "firebase_url": "https://aerial-day-144106.firebaseio.com",
+    "project_id": "aerial-day-144106",
+    "storage_bucket": "aerial-day-144106.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55286865240:android:0521cd78cc817897",
+        "android_client_info": {
+          "package_name": "com.compay.xm.androidnotificationsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55286865240-as5flpvqsgso4cgfjfqs0i6n1onsjsga.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmYX5uidX20Kx7JWobFZ0Yf7ZMxnSzjlM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
