@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,10 +16,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayAdapter chatRoomAdapter;
     private ArrayList<String> listOfChatRoom;
     private String userName;
-    private DatabaseReference rootDatabaseReference = FirebaseDatabase.getInstance().getReference().getRoot();
+    private DatabaseReference rootDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Chats");
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseAuth mAuthenticate;
     private FirebaseAuth.AuthStateListener mAuthenticationListener;
@@ -93,17 +96,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         chatRoomAdapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, listOfChatRoom);
         mChatRoomNamelistView.setAdapter(chatRoomAdapter);
         // Firebase Authentication
-        mAuthenticate=FirebaseAuth.getInstance();
+        mAuthenticate = FirebaseAuth.getInstance();
 
 
     }
 
     private void requestUserAcess() {
-        mAuthenticationListener=new FirebaseAuth.AuthStateListener() {
+        mAuthenticationListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser()==null){
-                    Intent signUpIntent=new Intent(MainActivity.this,LoginActivity.class);
+                if (firebaseAuth.getCurrentUser() == null) {
+                    Intent signUpIntent = new Intent(MainActivity.this, LoginActivity.class);
                     signUpIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     MainActivity.this.startActivity(signUpIntent);
 
@@ -113,43 +116,64 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
 
 
-
-
-
-      /*  AlertDialog.Builder userDetailsAlertDialog = new AlertDialog.Builder(MainActivity.this);
-        userDetailsAlertDialog.setCancelable(false);
-        userDetailsAlertDialog.setTitle("Enter Details To get in");
-        final EditText userdetailsEditText = new EditText(MainActivity.this);
-        userDetailsAlertDialog.setView(userdetailsEditText);
-        userDetailsAlertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                userName = userdetailsEditText.getText().toString();
-            }
-        });
-        userDetailsAlertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-                requestUserAcess();
-
-
-            }
-        });
-        userDetailsAlertDialog.show();*/
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.addchatroom_button:
-                Map<String, Object> mapObject = new HashMap<>();
-                mapObject.put(mchatRoomName_editText.getText().toString(), "");
-                rootDatabaseReference.updateChildren(mapObject);
+
+                if (TextUtils.isEmpty(userName)) {
+                    //Alert Dialog Box for user Name
+                    mchatRoomName_editText.setHint("");
+                    final AlertDialog.Builder userDetailsAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                    userDetailsAlertDialog.setCancelable(false);
+                    userDetailsAlertDialog.setTitle("enter user name");
+                    final EditText userdetailsEditText = new EditText(MainActivity.this);
+                    userDetailsAlertDialog.setView(userdetailsEditText);
+                    userDetailsAlertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            userName = userdetailsEditText.getText().toString();
+                            if (TextUtils.isEmpty(userName)){
+                                mchatRoomName_editText.setHint("Click To Add User Name");
+
+                            }
+                        }
+                    });
+                    userDetailsAlertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            requestUserAcess();
+
+
+                        }
+                    });
+                    userDetailsAlertDialog.show();
+                } else {
+
+
+                    if (TextUtils.isEmpty(mchatRoomName_editText.getText().toString())) {
+                        Toast.makeText(this, "Please Enter Chat Name", Toast.LENGTH_LONG).show();
+                    } else {
+                        updateReference();
+
+
+                    }
+                }
+
         }
 
+    }
+
+    private void updateReference() {
+        Map<String, Object> mapObject = new HashMap<>();
+        mapObject.put(mchatRoomName_editText.getText().toString(), "");
+        rootDatabaseReference.updateChildren(mapObject);
+        mchatRoomName_editText.setText("");
     }
 
     @Override
@@ -163,14 +187,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==R.id.logout){
+        if (item.getItemId() == R.id.logout) {
             LogoutUser();
         }
         return super.onOptionsItemSelected(item);
@@ -178,5 +202,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void LogoutUser() {
         mAuthenticate.signOut();
+        userName = "";
     }
 }

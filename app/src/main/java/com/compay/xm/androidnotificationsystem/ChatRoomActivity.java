@@ -2,10 +2,12 @@ package com.compay.xm.androidnotificationsystem;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -35,14 +37,21 @@ public class ChatRoomActivity extends AppCompatActivity {
         mButtonSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Map<String, Object> mapObject = new HashMap<String, Object>();
-                uniqueKey = rootDatabaseReference.push().getKey();
-                rootDatabaseReference.updateChildren(mapObject);
-                DatabaseReference messageRoot = rootDatabaseReference.child(uniqueKey);
-                Map<String, Object> userNameAndMessageMap = new HashMap<String, Object>();
-                userNameAndMessageMap.put("userName", userName);
-                userNameAndMessageMap.put("sendMessage", mEditTextUserMessage.getText().toString().trim());
-                messageRoot.updateChildren(userNameAndMessageMap);
+                if (!TextUtils.isEmpty(mEditTextUserMessage.getText().toString())){
+                    Map<String, Object> mapObject = new HashMap<String, Object>();
+                    uniqueKey = rootDatabaseReference.push().getKey();
+                    rootDatabaseReference.updateChildren(mapObject);
+                    DatabaseReference messageRoot = rootDatabaseReference.child(uniqueKey);
+                    Map<String, Object> userNameAndMessageMap = new HashMap<String, Object>();
+                    userNameAndMessageMap.put("userName", userName);
+                    userNameAndMessageMap.put("sendMessage", mEditTextUserMessage.getText().toString().trim());
+                    messageRoot.updateChildren(userNameAndMessageMap);
+                    mEditTextUserMessage.setText("");
+                }
+                else {
+                    Toast.makeText(ChatRoomActivity.this, "Please Enter Message", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
         rootDatabaseReference.addChildEventListener(new ChildEventListener() {
