@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
-    tools:context="com.compay.xm.androidnotificationsystem.MainActivity">
+    tools:context="com.compay.xm.androidnotificationsystem.activities.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
             android:layout_gravity="center_horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/textViewChatMessage" />
@@ -54,7 +54,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="4"
+            android:layout_weight="4.75"
             android:orientation="horizontal">
 
             <EditText
@@ -67,14 +67,14 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1.25"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/send_message_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send Message"
+                android:text="Send"
                 android:textAllCaps="false" />
         </LinearLayout>
     </LinearLayout>

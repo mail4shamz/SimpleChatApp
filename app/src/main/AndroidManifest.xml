@@ -3,6 +3,7 @@
     package="com.compay.xm.androidnotificationsystem">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -21,11 +22,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ChatRoomActivity"
+            android:name=".activities.ChatRoomActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- [START firebase_service] -->
-        <service android:name=".CustomFirebaseMessageingService">
+        <service android:name=".firebase_services.CustomFirebaseMessageingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -34,15 +35,15 @@
 
 
         <!-- [START firebase_iid_service] -->
-        <service android:name=".FireBaseInstanceService">
+        <service android:name=".firebase_services.FireBaseInstanceService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <!-- [END firebase_iid_service] -->
 
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".activities.SignUpActivity" />
+        <activity android:name=".activities.LoginActivity" />
     </application>
 
 </manifest>
