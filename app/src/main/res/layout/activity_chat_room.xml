@@ -30,20 +30,32 @@
         android:layout_weight="7.5"
         android:orientation="vertical">
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:id="@+id/ChatRoomNameScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center_horizontal">
+
+<!--            <android.support.v7.widget.RecyclerView
+                android:id="@+id/chat_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>-->
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/textViewChatMessage" />
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
 
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:background="@color/colorAccent"
+        android:layout_height="2dp"
+        android:layout_gravity="bottom" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -70,11 +82,11 @@
             android:layout_weight="1.25"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
+                android:src="@drawable/ic_send_white_24dp"
                 android:id="@+id/send_message_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:textAllCaps="false" />
         </LinearLayout>
     </LinearLayout>

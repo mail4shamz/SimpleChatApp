@@ -83,12 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                 }
             });
-        } else {
-
         }
-        Log.e("SignUpActivity","UserName "+userName);
-        Log.e("SignUpActivity","UserEmail "+userEmail);
-        Log.e("SignUpActivity","UserPassword "+userPassword);
 
 
 

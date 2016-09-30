@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +25,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private TextView mTextViewChatRoomName;
     private TextView mTextViewChatRoomMessage;
     private EditText mEditTextUserMessage;
-    private Button mButtonSendButton;
+    private ImageButton mButtonSendButton;
     private String userName, chatRoomName;
     private String uniqueKey;
     private DatabaseReference rootDatabaseReference;
@@ -93,7 +94,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         while (iterator.hasNext()){
             userName= (String) ((DataSnapshot)iterator.next()).getValue();
             userMessage= (String) ((DataSnapshot)iterator.next()).getValue();
-            mTextViewChatRoomMessage.append(userMessage+" : " +userName+"\n");
+            mTextViewChatRoomMessage.append(userMessage+" : " +userName+"\n\n");
         }
     }
 
@@ -101,7 +102,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         mTextViewChatRoomName = (TextView) findViewById(R.id.textViewRoomName);
         mTextViewChatRoomMessage = (TextView) findViewById(R.id.textViewChatMessage);
         mEditTextUserMessage = (EditText) findViewById(R.id.send_message_editText);
-        mButtonSendButton = (Button) findViewById(R.id.send_message_button);
+        mButtonSendButton = (ImageButton) findViewById(R.id.send_message_button);
 //=============other Values=====================================//
         userName = getIntent().getExtras().getString("userName");
         chatRoomName = getIntent().getExtras().getString("chatRoomName");

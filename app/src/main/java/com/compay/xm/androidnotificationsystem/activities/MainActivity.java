@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rootDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Set<String> nameSet = new HashSet<String>();
+                Set<String> nameSet = new HashSet<>();
                 Iterator iterator = dataSnapshot.getChildren().iterator();
                 while (iterator.hasNext()) {
                     nameSet.add(((DataSnapshot) iterator.next()).getKey());
