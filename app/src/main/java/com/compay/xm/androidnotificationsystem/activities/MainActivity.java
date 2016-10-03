@@ -1,5 +1,6 @@
 package com.compay.xm.androidnotificationsystem.activities;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,8 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.compay.xm.androidnotificationsystem.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,9 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button maddchatroom_button;
     private ArrayAdapter chatRoomAdapter;
     private ArrayList<String> listOfChatRoom;
+    private Intent signUpIntent;
     private String userName;
+    private ProgressDialog progressDialog;
     private DatabaseReference rootDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Chats");
-    private FirebaseAnalytics mFirebaseAnalytics;
+    private FirebaseUser user;
     private FirebaseAuth mAuthenticate;
     private FirebaseAuth.AuthStateListener mAuthenticationListener;
 
@@ -93,8 +99,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listOfChatRoom = new ArrayList<>();
         chatRoomAdapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, listOfChatRoom);
         mChatRoomNamelistView.setAdapter(chatRoomAdapter);
+       progressDialog = new ProgressDialog(MainActivity.this);
         // Firebase Authentication
         mAuthenticate = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
 
     }
@@ -104,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() == null) {
-                    Intent signUpIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    signUpIntent = new Intent(MainActivity.this, LoginActivity.class);
                     signUpIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     MainActivity.this.startActivity(signUpIntent);
 
@@ -133,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             userName = userdetailsEditText.getText().toString();
-                            if (TextUtils.isEmpty(userName)){
+                            if (TextUtils.isEmpty(userName)) {
                                 mchatRoomName_editText.setHint("Click To Add User Name");
 
                             }
@@ -201,16 +209,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView,  final View view, int i, long l) {
+    public void onItemClick(AdapterView<?> adapterView, final View view, int i, long l) {
 
 
-        if (userName != null){
+        if (userName != null) {
             Log.d("userNameNoTNull", userName);
             Intent chatRoomIntent = new Intent(MainActivity.this, ChatRoomActivity.class);
             chatRoomIntent.putExtra("chatRoomName", ((TextView) view).getText().toString());
             chatRoomIntent.putExtra("userName", userName);
             this.startActivity(chatRoomIntent);
-        }else {
+        } else {
             final AlertDialog.Builder userDetailsAlertDialog = new AlertDialog.Builder(MainActivity.this);
             userDetailsAlertDialog.setCancelable(false);
             userDetailsAlertDialog.setTitle("enter user name");
@@ -220,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     userName = userdetailsEditText.getText().toString();
-                    if (!TextUtils.isEmpty(userName)){
+                    if (!TextUtils.isEmpty(userName)) {
                         Intent chatRoomIntent = new Intent(MainActivity.this, ChatRoomActivity.class);
                         chatRoomIntent.putExtra("chatRoomName", ((TextView) view).getText().toString());
                         chatRoomIntent.putExtra("userName", userName);
@@ -228,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startActivity(chatRoomIntent);
 
                     }
-                    userName=null;
+                    userName = null;
                 }
             });
             userDetailsAlertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -257,8 +265,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.logout) {
             LogoutUser();
+        } else if (item.getItemId() == R.id.delete_user) {
+            deleteUser();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteUser() {
+        final AlertDialog.Builder userDetailsAlertDialog = new AlertDialog.Builder(MainActivity.this);
+        userDetailsAlertDialog.setCancelable(false);
+        userDetailsAlertDialog.setTitle("Are you sure?");
+        userDetailsAlertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ProgressDialog();
+                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            signUpIntent = new Intent(MainActivity.this, LoginActivity.class);
+                            signUpIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            MainActivity.this.startActivity(signUpIntent);
+                        }
+                    }
+                });
+                progressDialog.dismiss();
+            }
+        });
+        userDetailsAlertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        userDetailsAlertDialog.show();
+
+
+
+
+
+
+
+
+
+
+    }
+
+    private void ProgressDialog() {
+        progressDialog.setMessage("Deleting User Please Wait.....");
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
     }
 
     private void LogoutUser() {
