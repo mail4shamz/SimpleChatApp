@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listOfChatRoom = new ArrayList<>();
         chatRoomAdapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, listOfChatRoom);
         mChatRoomNamelistView.setAdapter(chatRoomAdapter);
-       progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog = new ProgressDialog(MainActivity.this);
         // Firebase Authentication
         mAuthenticate = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             final AlertDialog.Builder userDetailsAlertDialog = new AlertDialog.Builder(MainActivity.this);
             userDetailsAlertDialog.setCancelable(false);
-            userDetailsAlertDialog.setTitle("enter user name");
+            userDetailsAlertDialog.setTitle(getString(R.string.enterusername));
             final EditText userdetailsEditText = new EditText(MainActivity.this);
             userDetailsAlertDialog.setView(userdetailsEditText);
             userDetailsAlertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -301,16 +301,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         userDetailsAlertDialog.show();
-
-
-
-
-
-
-
-
-
-
     }
 
     private void ProgressDialog() {
