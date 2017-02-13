@@ -236,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startActivity(chatRoomIntent);
 
                     }
+                    userdetailsEditText.setText("");
                     userName = null;
                 }
             });
