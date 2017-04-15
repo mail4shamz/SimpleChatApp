@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidNotificationSystem.iml" filepath="$PROJECT_DIR$/AndroidNotificationSystem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/androidnotificationsystem.iml" filepath="$PROJECT_DIR$/androidnotificationsystem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
